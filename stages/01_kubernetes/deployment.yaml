@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: hello-deployment
+    name: student-app-deployment
 spec:
-    replicas: 2
+    replicas: 4
     selector:
        matchLabels:
-          app: hello-py-app
+          app: student-app
     template:
        metadata:
           labels:
-             app: hello-py-app
+             app: student-app
        spec:
           containers:
-          - name: hello-py
-            image: dgr113/kube-test-pod:v1
+          - name: student-app-container
+            image: dgr113/otus-arch-lab:student-app-v1
             ports:
               - name: web 
                 containerPort: 80

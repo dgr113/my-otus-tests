@@ -1,7 +1,7 @@
 FROM python:3.8.6-alpine3.12
 
 
-COPY ../project /usr/src/project
+COPY ./app /usr/src/project
 WORKDIR /usr/src/project
 RUN pip install -r ./requirements.txt
 

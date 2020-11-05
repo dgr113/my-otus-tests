@@ -8,15 +8,15 @@ app = Flask(__name__)
 
 
 
+@app.route('/')
+def index():
+    return "Hello from: {}".format( os.environ['HOSTNAME'] )
+
+
+
 @app.route('/health')
 def health():
-    return jsonify({'Status': 'OKK'})
-
-
-
-@app.route('/')
-def hello():
-    return "Hello world from: {}".format( os.environ['HOSTNAME'] )
+    return jsonify({'Status': 'OK'})
 
 
 
