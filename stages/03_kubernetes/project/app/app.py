@@ -9,11 +9,12 @@ app = Flask(__name__)
 
 config = {
     'DATABASE_URI': os.environ.get('DATABASE_URI', ''),
-    'HOSTNAME': os.environ['HOSTNAME'],
+    'HOSTNAME': os.environ.get('HOSTNAME', ''),
     'GREETING': os.environ.get('GREETING', 'Hello'),
 }
 
 engine = create_engine(config['DATABASE_URI'], echo=True)
+
 
 
 
@@ -30,11 +31,11 @@ def configuration():
 
 @app.route('/db')
 def db():
-    rows = []
     with engine.connect() as connection:
         result = connection.execute("select id, name from client;")
         rows = [ dict(r.items()) for r in result ]
     return json.dumps(rows)
+
 
 
 

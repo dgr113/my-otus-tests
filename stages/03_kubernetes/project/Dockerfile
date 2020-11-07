@@ -3,7 +3,7 @@ FROM python:3.8.6-alpine3.12
 
 COPY ./app /usr/src/project
 WORKDIR /usr/src/project
-RUN pip install -r ./requirements.txt
+RUN apk add build-base && apk add postgresql-dev && pip install -r ./requirements.txt
 
 
 EXPOSE 8000
