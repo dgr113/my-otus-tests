@@ -2,7 +2,7 @@
 
 import os
 import json
-from flask import Flask
+from flask import Flask, jsonify
 from sqlalchemy import create_engine  # type: ignore
 
 app = Flask(__name__)
@@ -20,13 +20,12 @@ engine = create_engine(config['DATABASE_URI'], echo=True)
 
 @app.route("/")
 def hello():
-    return config['GREETING'] + ' from ' + config['HOSTNAME'] + '!'
+    return "{} from {}!".format(config['GREETING'], config['HOSTNAME'])
 
 
 @app.route("/config")
 def configuration():
-    # config['version'] = 'NEW'
-    return json.dumps(config)
+    return jsonify( config )
 
 
 @app.route('/db')

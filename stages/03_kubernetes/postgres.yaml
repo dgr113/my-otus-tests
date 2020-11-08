@@ -29,28 +29,24 @@ spec:
         app: postgres
     spec:
       containers:
-      - name: postgres
-        image: postgres:latest
-        ports:
-        - containerPort: 5432
-          name: postgredb
-        env:
-          - name: POSTGRES_DB
-            value: myapp
-          - name: POSTGRES_USER
-            value: myuser
-          - name: POSTGRES_PASSWORD
-            value: passwd
-        volumeMounts:
-        - name: postgredb
-          mountPath: /var/lib/postgresql/data
-          subPath: postgres
+        - name: postgres
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+              name: postgredb
+          envFrom:
+            - secretRef:
+                name: student-app-secret
+          volumeMounts:
+            - name: postgredb
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
   volumeClaimTemplates:
-  - metadata:
-      name: postgredb
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      storageClassName: standard
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: postgredb
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi

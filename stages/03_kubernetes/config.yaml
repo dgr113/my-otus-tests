@@ -13,3 +13,6 @@ metadata:
 type: Opaque
 data:
   DATABASE_URI: cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMvbXlhcHAK
+  POSTGRES_DB: myapp
+  POSTGRES_USER: myuser
+  POSTGRES_PASSWORD: passwd
