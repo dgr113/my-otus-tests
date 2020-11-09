@@ -12,5 +12,6 @@ spec:
         paths:
           - path: /(\w+)/(.*)
             backend:
-              serviceName: "student-app-student-app-service"
+              # serviceName: "student-app-student-app-service"
+              serviceName: {{ include "student-app-chart.fullname" . }}
               servicePort: {{ .Values.service.port }}
