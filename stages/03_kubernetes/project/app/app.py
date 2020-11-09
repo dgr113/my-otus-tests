@@ -7,25 +7,25 @@ from sqlalchemy import create_engine  # type: ignore
 
 app = Flask(__name__)
 
-config = {
+app_config = {
     'DATABASE_URI': os.environ.get('DATABASE_URI', ''),
     'HOSTNAME': os.environ.get('HOSTNAME', ''),
     'GREETING': os.environ.get('GREETING', 'Hello'),
 }
 
-engine = create_engine(config['DATABASE_URI'], echo=True)
+engine = create_engine(app_config['DATABASE_URI'], echo=True)
 
 
 
 
 @app.route("/")
-def hello():
-    return "{} from {}!".format(config['GREETING'], config['HOSTNAME'])
+def index():
+    return "{} from {}!".format(app_config['GREETING'], app_config['HOSTNAME'])
 
 
 @app.route("/config")
-def configuration():
-    return jsonify( config )
+def config():
+    return jsonify(app_config)
 
 
 @app.route('/db')

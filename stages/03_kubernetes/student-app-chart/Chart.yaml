@@ -1,0 +1,16 @@
+apiVersion: v2
+name: student-app-chart
+description: A Helm chart for OTUS test app
+
+type: application
+
+version: 0.1.0
+appVersion: "student-app-with-db-v2"
+
+dependencies:
+  - name: postgresql
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - student-app-database
