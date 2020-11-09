@@ -2,10 +2,11 @@ apiVersion: v2
 name: student-app-chart
 description: A Helm chart for OTUS test app
 
-type: application
 
+type: application
 version: 0.1.0
-appVersion: "student-app-with-db-v2"
+appVersion: "student-app-with-db-v7"
+
 
 dependencies:
   - name: postgresql
