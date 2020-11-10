@@ -19,19 +19,12 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
-          # image: "dgr113/otus-arch-lab:student-app-with-db-v2"
           ports:
             - name: http
               containerPort: 80
               protocol: TCP
-          env:
-            - name: DATABASE_URI
-              valueFrom:
-                secretKeyRef:
-                  name: student-app-secret
-                  key: DATABASE_URI
-            - name: GREETING
-              valueFrom:
-                configMapKeyRef:
-                  name: student-app-config
-                  key: GREETING
+          envFrom:
+            - secretRef:
+                name: student-app-secret
+            - configMapRef:
+                name: student-app-config

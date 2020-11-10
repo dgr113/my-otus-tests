@@ -12,5 +12,7 @@ postgresql:
   postgresqlUsername: myuser
   postgresqlPassword: passwd
   postgresqlDatabase: myapp
+  persistence:
+    size: 1Gi
   service:
     port: "5432"

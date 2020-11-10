@@ -1,11 +1,12 @@
 FROM python:3.8.6-alpine3.12
 
 
-COPY ./app /usr/src/project
-WORKDIR /usr/src/project
-RUN apk add build-base && apk add postgresql-dev && pip install -r ./requirements.txt
+WORKDIR /usr/src/
+COPY ./requirements.txt ./app/requirements.txt
+RUN apk add build-base && apk add postgresql-dev && pip install -r ./app/requirements.txt
+
+COPY ./app /usr/src/app
 
 
 EXPOSE 8000
-
-ENTRYPOINT ["python", "/usr/src/project/app.py"]
+ENTRYPOINT ["python", "-m", "app"]

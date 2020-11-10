@@ -4,6 +4,11 @@ metadata:
   name: student-app-config
 data:
   GREETING: Bonjour
+  DB_DRIVER: "postgresql+psycopg2"
+  DB_HOST: {{ include "postgresql.fullname" . | quote }}
+  DB_PORT: {{ .Values.postgresql.service.port | quote }}
+  DB_NAME: {{ .Values.postgresql.postgresqlDatabase | quote }}
+
 ---
 apiVersion: v1
 kind: Secret
@@ -11,4 +16,5 @@ metadata:
   name: student-app-secret
 type: Opaque
 data:
-  DATABASE_URI: {{ printf "postgresql+psycopg2://%s:%s@%s:%s/%s" .Values.postgresql.postgresqlUsername .Values.postgresql.postgresqlPassword (include "postgresql.fullname" .) .Values.postgresql.service.port .Values.postgresql.postgresqlDatabase  | b64enc | quote }}
+  DB_USERNAME: {{ .Values.postgresql.postgresqlUsername | b64enc | quote }}
+  DB_PASSWD: {{ .Values.postgresql.postgresqlPassword | b64enc | quote }}
