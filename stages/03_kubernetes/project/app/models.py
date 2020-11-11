@@ -24,6 +24,20 @@ class Client(db.Model):
         return [ r.as_dict() for r in qr ]
 
     @classmethod
-    def delete(cls, _id: int) -> Sequence[str]:
-        qr = db.session.query(cls).filter(cls.id == _id).delete()
-        return [ str(r) for r in qr ]
+    def insert(cls, data: dict) -> Optional[int]:
+        obj = Client(name=data['name'])
+        db.session.add( obj )
+        db.session.commit()
+        return obj.id
+
+    @classmethod
+    def update(cls, _id: int, data: dict):
+        qr = db.session.query(cls).filter(cls.id == _id).update(data)
+        db.session.commit()
+        return str(qr)
+
+    @classmethod
+    def delete(cls, _id: int) -> Optional[int]:
+        db.session.query(cls).filter(cls.id == _id).delete()
+        db.session.commit()
+        return _id

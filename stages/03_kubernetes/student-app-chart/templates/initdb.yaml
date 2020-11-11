@@ -48,8 +48,9 @@ spec:
           - "-c"
           - |
             psql $DATABASE_URI <<'EOF'
-              create table client (id bigint primary key, name varchar);
-              insert into client (id, name) values (1, 'Konstantin');
+              DROP TABLE client;
+              CREATE TABLE client (id serial primary key, name varchar);
+              INSERT INTO client (name) values ('Konstantin');
             EOF
 
   backoffLimit: 0

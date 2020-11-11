@@ -5,7 +5,7 @@ description: A Helm chart for OTUS test app
 
 type: application
 version: 0.1.0
-appVersion: "student-app-with-db-v24"
+appVersion: "student-app-with-db-v03"
 
 
 dependencies:
