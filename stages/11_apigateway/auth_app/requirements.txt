@@ -1,0 +1,7 @@
+Flask==1.1.2
+flask-restful==0.3.8
+Flask-SQLAlchemy==2.4.4
+psycopg2==2.8.6
+PyJWT==2.0.1
+authlib==0.15.3
+cryptography==3.1.1

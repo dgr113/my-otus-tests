@@ -1,0 +1,16 @@
+apiVersion: skaffold/v2beta12
+kind: Config
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: sample-app
+    context: .
+deploy:
+  helm:
+    releases:
+    - name: sample-app
+      chartPath: sample-chart
+      skipBuildDependencies: false
+      values:
+        image: sample-app

@@ -1,0 +1,17 @@
+apiVersion: v2
+name: auth-app-chart
+description: A Helm chart for OTUS test auth app
+
+
+type: application
+version: 22.0.0
+appVersion: "v23"
+
+
+dependencies:
+  - name: postgresql
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - auth-app-database

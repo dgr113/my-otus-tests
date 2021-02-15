@@ -1,0 +1,22 @@
+# Роуты для сервиса аутентификации (auth app)
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: auth-app-mapping
+spec:
+  prefix: /auth
+  service: auth-app-chart:9000
+
+---
+# Роуты для сервиса приложения (sample app)
+apiVersion: getambassador.io/v2
+kind:  Mapping
+metadata:
+  name: sample-app-mapping
+spec:
+  prefix: /users/me/
+  service: sample-app-sample-app-chart:9000
+  rewrite: ""
+  retry_policy:
+    retry_on: "5xx"
+    num_retries: 5

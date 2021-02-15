@@ -1,0 +1,12 @@
+replicaCount: 1
+
+
+
+image:
+  repository: "dgr113/otus-arch-lab"
+  tag: "sample-app-v6"
+
+
+service:
+  type: NodePort
+  port: 9000

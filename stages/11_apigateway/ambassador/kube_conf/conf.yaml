@@ -1,0 +1,36 @@
+apiVersion: getambassador.io/v2
+kind: Host
+metadata:
+  name: auth-app-host
+spec:
+  hostname: arch.homework
+  acmeProvider:
+    authority: none
+  requestPolicy:
+    insecure:
+      action: Route
+
+---
+apiVersion: getambassador.io/v2
+kind: Filter
+metadata:
+  name: "myapp-jwt-filter"
+spec:
+  JWT:
+    jwksURI: "http://auth-app-chart:9000/keys/"
+    insecureTLS: true
+    renegotiateTLS: freelyAsClient
+    validAlgorithms:
+      - "RS256"
+    requireAudience: false
+    requireIssuer: false
+    requireIssuedAt: false
+    requireExpiresAt: false
+    requireNotBefore: false
+    injectRequestHeaders:
+      - name: "X-Token-String"
+        value: "{{ .token.Raw }}"
+      - name: "X-User-Id"
+        value: "{{ .token.Claims.sub }}"
+      - name: "X-User-Name"
+        value: "{{ .token.Claims.name }}"

@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "auth-app-ingress"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "Student-Name: $1";
+
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /(\w+)/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "auth-app-chart.fullname" . }}
+                port:
+                  number: {{ .Values.service.port }}

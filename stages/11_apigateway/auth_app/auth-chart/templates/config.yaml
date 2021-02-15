@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auth-app-secret
+type: Opaque
+data:
+  DB_USERNAME: {{ .Values.postgresql.postgresqlUsername | b64enc | quote }}
+  DB_PASSWD: {{ .Values.postgresql.postgresqlPassword | b64enc | quote }}
+  PUBLIC_KEY: {{ .Values.jwt.publicKey | b64enc | quote }}
+  PRIVATE_KEY: {{ .Values.jwt.privateKey | b64enc | quote }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-app-config
+data:
+  GREETING: "Bonjour"
+  DB_DRIVER: "postgresql+psycopg2"
+  DB_HOST: {{ include "postgresql.fullname" . | quote }}
+  DB_PORT: {{ .Values.postgresql.service.port | quote }}
+  DB_NAME: {{ .Values.postgresql.postgresqlDatabase | quote }}
