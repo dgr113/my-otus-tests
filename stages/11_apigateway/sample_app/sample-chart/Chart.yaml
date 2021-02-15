@@ -4,5 +4,5 @@ description: A Helm chart for app that verifies token
 
 
 type: application
-version: 6.0.0
-appVersion: "v6"
+version: 1.0.0
+appVersion: "v1"
