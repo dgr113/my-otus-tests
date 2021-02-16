@@ -1,7 +1,5 @@
 # coding: utf-8
 
-from typing import Sequence, Optional
-
 from .db_factory import db  # type: ignore
 
 
@@ -21,38 +19,34 @@ class Users( db.Model ):
         return { 'id': self.id, 'name': self.name }
 
     @classmethod
-    def get_one(cls, user_id: Optional[int] = None) -> Sequence[dict]:
-        qr = db.session.query( cls ).filter(cls.id == user_id).all() if user_id is not None else db.session.query(Users).all()
-        return [ r.as_dict() for r in qr ]
+    def get_one(cls, user_id: int) -> dict:
+        qr = db.session.query( cls ).filter( cls.id == user_id ).first()
+        return ( qr and qr.as_dict() ) or {}
 
     @classmethod
-    def find_one(cls, data: dict) -> Optional[dict]:
+    def find_one(cls, data: dict) -> dict:
         username = data["username"]
         password = data["password"]
         qr = db.session.query( cls ).filter( cls.name == username ).filter( cls.password == password ).first()
-        return qr.as_dict() if qr else None
+        return ( qr and qr.as_dict() ) or {}
 
     @classmethod
-    def insert(cls, data: dict) -> Optional[int]:
+    def insert(cls, data: dict) -> int:
         username = data["username"]
         password = data["password"]
-        try:
-            obj = Users(name=username, password=password)
-            db.session.add( obj )
-            db.session.commit()
-            return obj.id
-        except Exception:
-            db.session.rollback()
-            return None
-
-    @classmethod
-    def update(cls, user_id: int, data: dict) -> str:
-        qr = db.session.query( cls ).filter(cls.id == user_id).update(data)
+        obj = Users(name=username, password=password)
+        db.session.add( obj )
         db.session.commit()
-        return str(qr)
+        return obj.id
 
     @classmethod
-    def delete(cls, user_id: int) -> Optional[int]:
+    def update(cls, user_id: int, data: dict) -> int:
+        db.session.query( cls ).filter(cls.id == user_id).update(data)
+        db.session.commit()
+        return user_id
+
+    @classmethod
+    def delete(cls, user_id: int) -> int:
         db.session.query( cls ).filter(cls.id == user_id).delete()
         db.session.commit()
         return user_id

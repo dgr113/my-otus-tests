@@ -4,7 +4,7 @@ fullnameOverride: "auth-app-chart"
 
 image:
   repository: "dgr113/otus-arch-lab"
-  tag: "auth-app-v2"
+  tag: "auth-app-v2.1.0"
 
 
 service:

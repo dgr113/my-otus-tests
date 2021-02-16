@@ -23,8 +23,6 @@ class CustomJSONEncoder( JSONEncoder ):
 
 
 def build_db_uri() -> str:
-    """ Get database URI from env variables """
-
     return "{DB_DRIVER}://{DB_USERNAME}:{DB_PASSWD}@{DB_HOST}:{DB_PORT}/{DB_NAME}".format(**{
         'DB_DRIVER': env.get('DB_DRIVER', ''),
         'DB_HOST': env.get('DB_HOST', ''),
@@ -37,8 +35,6 @@ def build_db_uri() -> str:
 
 
 def create_app( app_name: str ) -> Flask:
-    """ Construct the core application """
-
     app = Flask( app_name )
     app.json_encoder = CustomJSONEncoder
 
@@ -53,13 +49,17 @@ def create_app( app_name: str ) -> Flask:
         }
     })
 
-    db.init_app( app )
-    api = Api( app )
-
     with app.app_context():
+        try:
+            db.init_app( app )
+        except Exception:
+            raise Exception( "Database init error!" )
+
+        api = Api( app )
+
         api.add_resource(Index, '/')
         api.add_resource(Keys, '/keys/')
         api.add_resource(UserLogin, '/login/')
         api.add_resource(UserRegister, '/register/')
-        api.add_resource(UserActions, '/users/<int:user_id>/', '/users/')
+        api.add_resource(UserActions, '/user/<int:user_id>/', '/user/')
         return app

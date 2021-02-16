@@ -3,8 +3,8 @@
 from functools import cache
 from datetime import datetime, timedelta
 
-from authlib.jose import jwk
-from jwt import encode as jwt_encode
+from authlib.jose import jwk  # type: ignore
+from jwt import encode as jwt_encode  # type: ignore
 
 
 
