@@ -4,8 +4,8 @@ from typing import Optional, Callable, Any
 from flask import current_app, request, abort
 from flask_restful import Resource  # type: ignore
 
-from .models import Users
 from .jwt import JwtUtils
+from .models import Users, UserAlreadyExistsError
 
 RESTFUL_JSON_RESPONSE = tuple[dict, int]
 
@@ -38,12 +38,15 @@ class UserLogin( Resource ):
 
 
 class UserRegister( Resource ):
-    def post(self) -> dict:
+    def post(self) -> RESTFUL_JSON_RESPONSE:
         req_data = request.get_json()
-        if user_id := Users.insert( req_data ):
-            return { 'id': user_id }
-        else:
-            abort(400, "Username already exists")
+        try:
+            user_id = Users.insert( req_data )
+            return { "result": { "id": user_id } }, 200
+        except UserAlreadyExistsError:
+            return { "error": "User already exists" }, 400
+        except Exception as err:
+            return { "error": str(err) }, 500
 
 
 

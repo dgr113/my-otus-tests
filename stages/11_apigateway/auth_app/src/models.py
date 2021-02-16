@@ -5,6 +5,11 @@ from .db_factory import db  # type: ignore
 
 
 
+class UserAlreadyExistsError(Exception):
+    pass
+
+
+
 class Users( db.Model ):
     __tablename__ = 'users'
 
@@ -34,10 +39,13 @@ class Users( db.Model ):
     def insert(cls, data: dict) -> int:
         username = data["username"]
         password = data["password"]
-        obj = Users(name=username, password=password)
-        db.session.add( obj )
-        db.session.commit()
-        return obj.id
+        if not db.session.query( db.exists().where( cls.name == username ) ).scalar():
+            obj = Users(name=username, password=password)
+            db.session.add( obj )
+            db.session.commit()
+            return obj.id
+        else:
+            raise UserAlreadyExistsError()
 
     @classmethod
     def update(cls, user_id: int, data: dict) -> int:
