@@ -31,5 +31,5 @@ Cервис пользователей не совсем `Restful` и подде
 <br>
 
 ```shell
-newman run --env-var "BASE_URL=http://192.168.93.2:32462" --env-var "BAD_USER_ID=0" postman_auth_tests.json;
+newman run --env-var "BASE_URL=http://192.168.93.2:32462" --env-var "BAD_USER_ID=0" ./tests/postman_auth_tests.json;
 ```

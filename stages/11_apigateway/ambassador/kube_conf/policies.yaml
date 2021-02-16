@@ -9,6 +9,6 @@ spec:
       filters:
         - name: "myapp-jwt-filter"
     - host: "*"
-      path: "/auth/users/*"
+      path: "/auth/user/*"
       filters:
         - name: "myapp-jwt-filter"
