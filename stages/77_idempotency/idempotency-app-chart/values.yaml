@@ -1,0 +1,18 @@
+replicaCount: 4
+
+image:
+  repository: "dgr113/otus-arch-lab"
+
+service:
+  type: NodePort
+  port: 9000
+
+postgresql:
+  enabled: true
+  postgresqlUsername: myuser
+  postgresqlPassword: passwd
+  postgresqlDatabase: myapp
+  persistence:
+    size: 1Gi
+  service:
+    port: "5432"

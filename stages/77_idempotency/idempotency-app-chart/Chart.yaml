@@ -1,0 +1,17 @@
+apiVersion: v2
+name: idempotency-app-chart
+description: A Helm chart for OTUS test app
+
+
+type: application
+version: 1.1.9
+appVersion: "idempotency-app-v23"
+
+
+dependencies:
+  - name: postgresql
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - idempotency-app-database
