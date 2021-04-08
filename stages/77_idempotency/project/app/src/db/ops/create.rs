@@ -1,4 +1,4 @@
-use chrono::{NaiveDateTime, Utc};
+use chrono::{ NaiveDateTime, Utc };
 use serde::{ Deserialize, Serialize };
 use diesel::{ prelude::*, RunQueryDsl, Insertable, result::Error as DbError };
 
