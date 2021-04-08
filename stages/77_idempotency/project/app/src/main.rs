@@ -36,7 +36,7 @@ async fn main() -> Result<(), AppError> {
     let db_pool = get_pg_conn_pool( &db_path ) ?;
     let app_data = AppData { db_pool };
 
-    let serv_addr = env::var( "SERVICE_ADDR" ).unwrap_or( String::from("0.0.0.0:8888") );
+    let serv_addr = env::var( "SERVICE_ADDR" ).unwrap_or( String::from( "0.0.0.0:8888" ) );
 
     let serv = HttpServer::new(move || {
         AppFactory::create_app().data( app_data.clone().db_pool )

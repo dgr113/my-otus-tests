@@ -28,13 +28,15 @@ COPY --from=cacher /usr/src/project/target ./target
 COPY --from=cacher /usr/src/project/.cargo ./.cargo
 COPY --from=cacher /root/.cargo /root/.cargo
 COPY app ./
-RUN cargo build --bin app --target $TARGET --release
+RUN cargo build --bin myapp --target $TARGET --release
+#RUN ldd ./target/$TARGET/release/myapp
 
 
 
 FROM alpine:3.13
-RUN apk --no-cache add ca-certificates postgresql-dev
+#RUN apk --no-cache add ca-certificates postgresql-dev
+RUN apk --no-cache add ca-certificates
 ARG TARGET="x86_64-unknown-linux-musl"
 WORKDIR /usr/local/bin
-COPY --from=builder /usr/src/project/target/$TARGET/release/app ./app
-ENTRYPOINT ["./app"]
+COPY --from=builder /usr/src/project/target/$TARGET/release/myapp ./myapp
+ENTRYPOINT ["./myapp"]

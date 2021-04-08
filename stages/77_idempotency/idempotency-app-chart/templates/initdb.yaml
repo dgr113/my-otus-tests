@@ -73,7 +73,8 @@ spec:
 
                 CREATE TABLE order_unique_keys (
                   id                  SERIAL primary key,
-                  msg_key             TEXT not null unique
+                  order_id            INTEGER not null references orders (id) on delete cascade,
+                  unique_key          TEXT not null unique
                 );
             EOF
 

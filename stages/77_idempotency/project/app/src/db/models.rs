@@ -31,9 +31,12 @@ pub struct OrderProduct {
 }
 
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Identifiable, Queryable, Insertable)]
+
+#[derive(Debug, PartialEq, Serialize, Deserialize, Identifiable, Queryable, Insertable, Associations)]
+#[belongs_to(parent = "Order", foreign_key = "order_id")]
 #[table_name = "order_unique_keys"]
 pub struct OrderUniqueKey {
     pub id: i32,
-    pub msg_key: String
+    pub order_id: i32,
+    pub unique_key: String
 }

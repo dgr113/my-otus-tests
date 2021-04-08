@@ -22,11 +22,13 @@ table! {
 table! {
     order_unique_keys (id) {
         id -> Integer,
-        msg_key -> Text,
+        order_id -> Integer,
+        unique_key -> Text,
     }
 }
 
 joinable!(order_products -> orders (order_id));
+joinable!(order_unique_keys -> orders (order_id));
 
 allow_tables_to_appear_in_same_query!(
     order_products,

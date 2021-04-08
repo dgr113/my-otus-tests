@@ -4,8 +4,7 @@ use actix_web::web::JsonConfig;
 use actix_service::ServiceFactory;
 use actix_web::error::InternalError;
 use actix_web::{
-    web, App, Error, HttpResponse,
-    body::Body,
+    web, App, Error, HttpResponse, body::Body,
     dev::{ ServiceResponse, ServiceRequest }
 };
 
@@ -52,10 +51,16 @@ impl AppFactory {
 
             .route("/status/", web::get().to( views::health::service_status ))
 
-            .route("/a/", web::post().to( views::orders::create ) )
-            .route("/a/{id}/", web::get().to( views::orders::get_by_id ) )
-            .route("/a/", web::get().to( views::orders::get_by_filter ) )
-            .route("/a/{id}/", web::put().to( views::orders::update_by_id ) )
-            .route("/a/{id}/", web::delete().to( views::orders::delete_by_id ) )
+            .service(
+                web::resource("/a/")
+                    .route( web::get().to( views::orders::get_by_filter ) )
+                    .route( web::post().to( views::orders::create ) )
+            )
+            .service(
+                web::resource("/a/{id}/")
+                    .route( web::get().to( views::orders::get_by_id ) )
+                    .route( web::put().to( views::orders::update_by_id ) )
+                    .route( web::delete().to( views::orders::delete_by_id ) )
+            )
     }
 }

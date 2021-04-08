@@ -13,7 +13,14 @@ pub struct ResponseHealth {
 
 
 #[derive(Serialize, Deserialize)]
-pub struct ResponseOrder {
+pub struct ResponseOrderGet {
     pub order: Order,
     pub order_products: Vec<OrderProduct>
+}
+
+
+
+#[derive(Serialize, Deserialize)]
+pub struct ResponseOrderCreate {
+    pub order_id: i32
 }

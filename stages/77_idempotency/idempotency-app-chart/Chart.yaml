@@ -4,8 +4,8 @@ description: A Helm chart for OTUS test app
 
 
 type: application
-version: 1.1.9
-appVersion: "idempotency-app-v23"
+version: 1.2.5
+appVersion: "idempotency-app-v29"
 
 
 dependencies:
