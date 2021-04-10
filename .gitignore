@@ -4,3 +4,4 @@
 /my-otus-tests.iml
 
 *.lock
+/stages/88_prometheus/tests/libs/
