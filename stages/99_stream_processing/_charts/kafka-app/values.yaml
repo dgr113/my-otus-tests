@@ -1,0 +1,39 @@
+images:
+  repository: "dgr113/otus-arch-lab"
+
+
+services:
+  orders:
+    name: "orders"
+    image: "kfk-orders-app-v11"
+    type: NodePort
+    port: 9001
+    replicaCount: 1
+
+  billing:
+    name: "billing"
+    image: "kfk-billing-app-v11"
+    type: NodePort
+    port: 9002
+    replicaCount: 1
+
+  notify:
+    name: "notify"
+    image: "kfk-notify-app-v11"
+    type: NodePort
+    port: 9003
+    replicaCount: 1
+
+
+postgresql:
+  enabled: true
+  postgresqlUsername: myuser
+  postgresqlPassword: passwd
+  postgresqlDatabase: myuser
+  postgresqlOrdersDatabase: orders
+  postgresqlBillingDatabase: billing
+  postgresqlNotifyDatabase: notify
+  persistence:
+    size: 1Gi
+  service:
+    port: "5432"

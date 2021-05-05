@@ -1,0 +1,36 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kfk-app-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /orders(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Values.services.orders.name }}-service"
+                port:
+                  number: {{ .Values.services.orders.port }}
+
+          - path: /billing(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Values.services.billing.name }}-service"
+                port:
+                  number: {{ .Values.services.billing.port }}
+
+          - path: /notify(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Values.services.notify.name }}-service"
+                port:
+                  number: {{ .Values.services.notify.port }}

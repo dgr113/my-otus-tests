@@ -1,0 +1,132 @@
+version: '3.9'
+
+
+
+services:
+  kfk-orders-service:
+    image: dgr113/otus-arch-lab:kfk-orders-app-v11
+    container_name: kfk-orders-container
+    build:
+      context: orders_project
+#    deploy:
+#      restart_policy:
+#        condition: on-failure
+#        max_attempts: 3
+    environment:
+      - DEBUG=1
+      - KAFKA_ADDR=kafka1:9092
+      - KAFKA_CONSUMER_TOPIC=order-topic
+      - KAFKA_PRODUCER_TOPIC=order-topic
+      - KAFKA_GROUP=my-group
+      - DB_DRIVER=postgresql
+      - DB_HOST=common-db
+      - DB_PORT=5432
+      - DB_NAME=orders
+      - DB_USER=my-user
+      - DB_PASSWORD=my-pass
+    ports:
+      - "80:8888"
+    depends_on:
+      - common-db
+      - kafka1
+
+
+  kfk-billing-service:
+    image: dgr113/otus-arch-lab:kfk-billing-app-v11
+    container_name: kfk-billing-container
+    build:
+      context: billing_project
+    environment:
+      - DEBUG=1
+      - KAFKA_ADDR=kafka1:9092
+      - KAFKA_CONSUMER_TOPIC=order-topic
+      - KAFKA_PRODUCER_TOPIC=billing-topic
+      - KAFKA_GROUP=my-group
+      - DB_DRIVER=postgresql
+      - DB_HOST=common-db
+      - DB_PORT=5432
+      - DB_NAME=billing
+      - DB_USER=my-user
+      - DB_PASSWORD=my-pass
+    ports:
+      - "88:8888"
+    depends_on:
+      - common-db
+      - kafka1
+
+
+  kfk-notify-service:
+    image: dgr113/otus-arch-lab:kfk-notify-app-v11
+    container_name: kfk-notify-container
+    build:
+      context: notify_project
+    environment:
+      - DEBUG=1
+      - KAFKA_ADDR=kafka1:9092
+      - KAFKA_CONSUMER_TOPIC=billing-topic
+      - KAFKA_PRODUCER_TOPIC=notify-topic
+      - KAFKA_GROUP=my-group
+      - DB_DRIVER=postgresql
+      - DB_HOST=common-db
+      - DB_PORT=5432
+      - DB_NAME=notify
+      - DB_USER=my-user
+      - DB_PASSWORD=my-pass
+    ports:
+      - "89:8888"
+    depends_on:
+      - common-db
+      - kafka1
+
+
+  common-db:
+    image: postgres:13.2-alpine
+    environment:
+      - POSTGRES_USER=my-user
+      - POSTGRES_PASSWORD=my-pass
+#      - POSTGRES_DB=orders
+    volumes:
+      - ./_db_init/common:/docker-entrypoint-initdb.d
+      - ./_local/data/common-db:/var/lib/postgresql/data
+    ports:
+      - 54329:5432
+
+
+  zoo1:
+    image: zookeeper:3.4.9
+    hostname: zoo1
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zoo1:2888:3888
+    volumes:
+      - ./_local/data/zoo1/data:/data
+      - ./_local/data/zoo1/datalog:/datalog
+
+
+  kafka1:
+    image: confluentinc/cp-kafka:5.5.1
+    hostname: kafka1
+    ports:
+      - "9094:9094"
+      - "9999:9999"
+    environment:
+      KAFKA_LISTENERS: INSIDE://:9092, OUTSIDE://:9094
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka1:9092, OUTSIDE://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT, OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: "zoo1:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_JMX_PORT: 9999
+      KAFKA_JMX_HOSTNAME: ${DOCKER_HOST_IP:-127.0.0.1}
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    volumes:
+      - ./_local/data/kafka1/data:/var/lib/kafka/data
+    depends_on:
+      - zoo1

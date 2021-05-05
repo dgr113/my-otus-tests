@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: "{{ .Values.services.orders.name }}-deployment"
+  labels:
+    service: "{{ .Values.services.orders.name }}"
+
+spec:
+  replicas: {{ .Values.services.orders.replicaCount }}
+  selector:
+    matchLabels:
+      app: "{{ .Values.services.orders.name }}-{{ .Chart.AppVersion }}"
+
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.services.orders.name }}-{{ .Chart.AppVersion }}"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configs.yaml") . | sha256sum }}
+
+    spec:
+      containers:
+        - name: "kafka-orders-chart"
+          image: "{{ .Values.images.repository }}:{{ .Values.services.orders.image }}"
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: kafka-app-secret
+            - configMapRef:
+                name: kafka-orders-config
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: "{{ .Values.services.billing.name }}-deployment"
+  labels:
+    service: {{ .Values.services.billing.name }}
+
+spec:
+  replicas: {{ .Values.services.billing.replicaCount }}
+  selector:
+    matchLabels:
+      app: "{{ .Values.services.billing.name }}-{{ .Chart.AppVersion }}"
+
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.services.billing.name }}-{{ .Chart.AppVersion }}"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configs.yaml") . | sha256sum }}
+
+    spec:
+      containers:
+        - name: "kafka-billing-chart"
+          image: "{{ .Values.images.repository }}:{{ .Values.services.billing.image }}"
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: kafka-app-secret
+            - configMapRef:
+                name: kafka-billing-config
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: "{{ .Values.services.notify.name }}-deployment"
+  labels:
+    service: {{ .Values.services.notify.name }}
+
+spec:
+  replicas: {{ .Values.services.notify.replicaCount }}
+  selector:
+    matchLabels:
+      app: "{{ .Values.services.notify.name }}-{{ .Chart.AppVersion }}"
+
+  template:
+    metadata:
+      labels:
+        app: "{{ .Values.services.notify.name }}-{{ .Chart.AppVersion }}"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configs.yaml") . | sha256sum }}
+
+    spec:
+      containers:
+        - name: "kafka-notify-chart"
+          image: "{{ .Values.images.repository }}:{{ .Values.services.notify.image }}"
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: kafka-app-secret
+            - configMapRef:
+                name: kafka-notify-config

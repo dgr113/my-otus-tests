@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-app-secret
+type: Opaque
+data:
+  DB_USER: {{ .Values.postgresql.postgresqlUsername | b64enc | quote }}
+  DB_PASSWORD: {{ .Values.postgresql.postgresqlPassword | b64enc | quote }}
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-orders-config
+data:
+  DB_DRIVER: "postgresql"
+  DB_HOST: {{ include "postgresql.fullname" . | quote }}
+  DB_PORT: {{ .Values.postgresql.service.port | quote }}
+  DB_NAME: {{ .Values.postgresql.postgresqlOrdersDatabase | quote }}
+  KAFKA_ADDR: "cp-app-cp-kafka:9092"
+  KAFKA_CONSUMER_TOPIC: "order-topic"
+  KAFKA_PRODUCER_TOPIC: "order-topic"
+  KAFKA_GROUP: ""
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-billing-config
+data:
+  DB_DRIVER: "postgresql"
+  DB_HOST: {{ include "postgresql.fullname" . | quote }}
+  DB_PORT: {{ .Values.postgresql.service.port | quote }}
+  DB_NAME: {{ .Values.postgresql.postgresqlBillingDatabase | quote }}
+  KAFKA_ADDR: "cp-app-cp-kafka:9092"
+  KAFKA_CONSUMER_TOPIC: "order-topic"
+  KAFKA_PRODUCER_TOPIC: "billing-topic"
+  KAFKA_GROUP: ""
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-notify-config
+data:
+  DB_DRIVER: "postgresql"
+  DB_HOST: {{ include "postgresql.fullname" . | quote }}
+  DB_PORT: {{ .Values.postgresql.service.port | quote }}
+  DB_NAME: {{ .Values.postgresql.postgresqlNotifyDatabase | quote }}
+  KAFKA_ADDR: "cp-app-cp-kafka:9092"
+  KAFKA_CONSUMER_TOPIC: "billing-topic"
+  KAFKA_PRODUCER_TOPIC: "notify-topic"
+  KAFKA_GROUP: ""

@@ -1,0 +1,17 @@
+apiVersion: v2
+name: kafka-app-chart
+description: A Helm chart for OTUS test Kafka app
+
+
+type: application
+version: 1.1.1
+appVersion: "kafka-app-v15"
+
+
+dependencies:
+  - name: postgresql
+    version: 8.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - kafka-app-database

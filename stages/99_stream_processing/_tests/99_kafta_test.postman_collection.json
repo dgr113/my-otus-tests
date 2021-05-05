@@ -1,0 +1,676 @@
+{
+	"info": {
+		"_postman_id": "35d143ac-32df-4d3d-9dc3-f51e14abc4ec",
+		"name": "99_kafta_test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "orders",
+			"item": [
+				{
+					"name": "00_HEALTH_CHECK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/status/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"status",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "01_ORDERS_CREATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    const order_id = pm.response.json()[\"order_id\"];\r",
+									"    pm.globals.set(\"CURRENT_ORDER_ID\", order_id);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							},
+							{
+								"key": "X-Account-Id",
+								"value": "{{CURRENT_ACCOUNT_ID}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idempotency_key\": \"507fe577-6f58-43aa-a98c-7313904da8c6\",\r\n    \"order\": {\r\n        \"customer_id\": {{USER_ID}}\r\n    },\r\n    \"order_products\": [\r\n        {\r\n            \"price\": 55,\r\n            \"quantity\": 3,\r\n            \"product_id\": 8000,\r\n            \"product_name\": \"product one\"\r\n        },\r\n        {\r\n            \"price\": 70,\r\n            \"quantity\": 1,\r\n            \"product_id\": 8001,\r\n            \"product_name\": \"product two\"\r\n        }\r\n    ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/orders/a/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"a",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02_ORDERS_UPDATE_BY_FILTER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"order\": {\r\n        \"shop_name\": \"bistro\",\r\n        \"close_date\": \"2020-12-27T19:56:22.730011\",\r\n        \"order_status_by_name\": \"CANCELLED_PASSENGER\"\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/orders/a/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"a",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03_ORDERS_GET_BY_FILTER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/a/?date_right=2021-04-30T20:56:22.730011&date_left=2021-04-01T17:56:22.730011",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"a",
+								""
+							],
+							"query": [
+								{
+									"key": "date_right",
+									"value": "2021-04-30T20:56:22.730011",
+									"description": "Right date bound"
+								},
+								{
+									"key": "date_left",
+									"value": "2021-04-01T17:56:22.730011",
+									"description": "Left date bound"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03_ORDERS_GET_BY_ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/a/{{CURRENT_ORDER_ID}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"a",
+								"{{CURRENT_ORDER_ID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04_ORDERS_DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/orders/a/{{CURRENT_ORDER_ID}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"orders",
+								"a",
+								"{{CURRENT_ORDER_ID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "billing",
+			"item": [
+				{
+					"name": "00_HEALTH_CHECK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/billing/status/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"billing",
+								"status",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "01_ACCOUNT_CREATE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    const account_id = pm.response.json()[\"account_id\"];\r",
+									"    pm.globals.set(\"CURRENT_ACCOUNT_ID\", account_id);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idempotency_key\": \"bc4ea1c7-65b2-4074-9f88-cb38248f4ef3\",\r\n    \"account\": {\r\n        \"user_id\": {{USER_ID}},\r\n        \"user_name\": \"test-user\"\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/billing/a/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"billing",
+								"a",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "02_ACCOUNT_ADD_MONEY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"add_money\": 1000,\r\n    \"remove_money\": 51\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/billing/a/{{CURRENT_ACCOUNT_ID}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"billing",
+								"a",
+								"{{CURRENT_ACCOUNT_ID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "03_ACCOUNT_GET_BY_ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/billing/a/{{CURRENT_ACCOUNT_ID}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"billing",
+								"a",
+								"{{CURRENT_ACCOUNT_ID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "04_ACCOUNT_DELETE",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/billing/a/{{CURRENT_ACCOUNT_ID}}/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"billing",
+								"a",
+								"{{CURRENT_ACCOUNT_ID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notify",
+			"item": [
+				{
+					"name": "00_HEALTH_CHECK",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notify/status/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notify",
+								"status",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "01_NOTIFY_GET_BY_FILTER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status test\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Host",
+								"value": "arch.homework",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/notify/a/?account_id={{CURRENT_ACCOUNT_ID}}&user_id={{USER_ID}}",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"notify",
+								"a",
+								""
+							],
+							"query": [
+								{
+									"key": "account_id",
+									"value": "{{CURRENT_ACCOUNT_ID}}",
+									"description": "Billing account Id"
+								},
+								{
+									"key": "user_id",
+									"value": "{{USER_ID}}",
+									"description": "User Id"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://172.18.110.91"
+		},
+		{
+			"key": "USER_ID",
+			"value": "3"
+		}
+	]
+}
